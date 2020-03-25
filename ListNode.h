@@ -12,7 +12,16 @@ private:
     ListNode *next, *previous;
 
 public:
-    ListNode(T val) : data(val), next(nullptr), previous(nullptr) {}
+    ListNode() {
+        next = nullptr;
+        previous = nullptr;
+    }
+    ListNode(T val) {
+        data = val;
+        next = nullptr;
+        previous = nullptr;
+    }
+    ~ListNode() {}
 
     bool operator==(const ListNode &rhs) const { return data == rhs.data; }
 
