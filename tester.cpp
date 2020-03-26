@@ -79,8 +79,7 @@ TEST_CASE ("LinkList class") {
         REQUIRE( list2.getFront() == 2 );
         REQUIRE( list2.getBack() == 3 );
 
-
-
+        //back to list 1
         list1.push_back(4);
         REQUIRE( list1.getSize() == 3 );
         REQUIRE( list1.getFront() == 2 );
@@ -136,7 +135,90 @@ TEST_CASE ("LinkList class") {
         REQUIRE( list5.getTail()->getPrevious()->getData() == 3 );
         REQUIRE( list5.getBack() == 4 );
     }
+    SECTION("pop_front/pop_back (int)") {
+        LinkList<int> list1;
+        list1.pop_back();
+        list1.pop_front();
 
+        list1.push_back(1);
+        list1.pop_front();
+        REQUIRE(list1.getSize() == 0);
+        REQUIRE(list1.getHead() == nullptr);
+        REQUIRE(list1.getTail() == nullptr);
+
+        list1.push_back(1);
+        list1.pop_back();
+        REQUIRE(list1.getSize() == 0);
+        REQUIRE(list1.getHead() == nullptr);
+        REQUIRE(list1.getTail() == nullptr);
+
+        list1.push_back(1);
+        list1.push_back(2);
+        list1.push_back(3);
+
+        list1.pop_front();
+        REQUIRE(list1.getSize() == 2);
+        REQUIRE(list1.getFront() == 2);
+        REQUIRE(list1.getBack() == 3);
+        REQUIRE(list1.getHead()->getPrevious() == nullptr);
+        REQUIRE(list1.getHead()->getNext()->getData() == 3);
+
+        list1.push_front(1);
+        list1.pop_back();
+        REQUIRE(list1.getSize() == 2);
+        REQUIRE(list1.getFront() == 1);
+        REQUIRE(list1.getBack() == 2);
+        REQUIRE(list1.getTail()->getNext() == nullptr);
+        REQUIRE(list1.getTail()->getPrevious()->getData() == 1);
+    }
+    SECTION("contains() (int)") {
+        LinkList<int> list1;
+        bool found;
+
+        found = list1.contains(3);
+        REQUIRE(found == false);
+
+
+        list1.push_back(1);
+        found = list1.contains(1);
+        REQUIRE(found == true);
+
+
+        list1.push_back(2);
+        found = list1.contains(1);
+        REQUIRE(found == true);
+
+        found = list1.contains(2);
+        REQUIRE(found == true);
+
+        found = list1.contains(3);
+        REQUIRE(found == false);
+
+
+        list1.push_front(18);
+        list1.push_back(29);
+
+        found = list1.contains(2);
+        REQUIRE(found == true);
+
+        found = list1.contains(18);
+        REQUIRE(found == true);
+
+        found = list1.contains(29);
+        REQUIRE(found == true);
+
+        found = list1.contains(-1);
+        REQUIRE(found == false);
+
+
+        list1.pop_back();
+        found = list1.contains(29);
+        REQUIRE(found == false);
+
+        found = list1.contains(2);
+        REQUIRE(found == true);
+    }
+//--------------------------------------------------------------------------------------------------------------------//
     SECTION ("constructor (DSString)") {
         LinkList<DSString> list1;
 
@@ -224,5 +306,60 @@ TEST_CASE ("LinkList class") {
         REQUIRE( list2.getHead()->getNext()->getData() == "b" );
         REQUIRE( list2.getTail()->getPrevious()->getData() == "c" );
         REQUIRE( list2.getBack() == "d" );
+    }
+    SECTION("pop_front/pop_back (DSString)") {
+        LinkList<DSString> list1;
+        list1.pop_back();
+        list1.pop_front();
+
+        list1.push_back("a");
+        list1.pop_front();
+        REQUIRE(list1.getSize() == 0);
+        REQUIRE(list1.getHead() == nullptr);
+        REQUIRE(list1.getTail() == nullptr);
+
+        list1.push_back("a");
+        list1.pop_back();
+        REQUIRE(list1.getSize() == 0);
+        REQUIRE(list1.getHead() == nullptr);
+        REQUIRE(list1.getTail() == nullptr);
+
+        list1.push_back("a");
+        list1.push_back("b");
+        list1.push_back("c");
+
+        list1.pop_front();
+        REQUIRE(list1.getSize() == 2);
+        REQUIRE(list1.getFront() == "b");
+        REQUIRE(list1.getBack() == "c");
+        REQUIRE(list1.getHead()->getPrevious() == nullptr);
+        REQUIRE(list1.getHead()->getNext()->getData() == "c");
+
+        list1.push_front("a");
+        list1.pop_back();
+        REQUIRE(list1.getSize() == 2);
+        REQUIRE(list1.getFront() == "a");
+        REQUIRE(list1.getBack() == "b");
+        REQUIRE(list1.getTail()->getNext() == nullptr);
+        REQUIRE(list1.getTail()->getPrevious()->getData() == "a");
+    }
+    SECTION("isEmpty (both)") {
+        LinkList<int> intList;
+        LinkList<DSString> stringList;
+
+        REQUIRE(intList.isEmpty());
+        REQUIRE(stringList.isEmpty());
+
+        intList.push_back(3);
+        REQUIRE(!intList.isEmpty());
+
+        stringList.push_back("a");
+        REQUIRE(!stringList.isEmpty());
+
+        intList.pop_back();
+        REQUIRE(intList.isEmpty());
+
+        stringList.pop_back();
+        REQUIRE(stringList.isEmpty());
     }
 }
