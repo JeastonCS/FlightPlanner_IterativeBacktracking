@@ -1,0 +1,14 @@
+//
+// Created by Jack Easton on 3/26/2020.
+//
+
+#ifndef S20_PA04_FLIGHTPLANNER_ORIGINCITY_H
+#define S20_PA04_FLIGHTPLANNER_ORIGINCITY_H
+
+
+class OriginCity {
+
+};
+
+
+#endif //S20_PA04_FLIGHTPLANNER_ORIGINCITY_H

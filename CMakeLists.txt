@@ -25,4 +25,4 @@ foreach(file IN LISTS input01 input02 input03 input04)
 endforeach()
 
 set(CMAKE_CXX_STANDARD 17)
-add_executable(${EXE_NAME} tester.cpp main.cpp DSString.h DSString.cpp ListNode.h LinkList.h)
+add_executable(${EXE_NAME} tester.cpp main.cpp DSString.h DSString.cpp ListNode.h LinkList.h Stack.h OriginCity.cpp OriginCity.h)
