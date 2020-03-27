@@ -6,6 +6,7 @@
 #define S20_PA04_FLIGHTPLANNER_LINKLIST_H
 
 #include "ListNode.h"
+#include "LinkListIterator.h"
 
 #include <iostream>
 using namespace std;
@@ -34,6 +35,10 @@ public:
     ListNode<T> * getTail() { return tail; }
     T getFront() { return head->getData(); }
     T getBack() { return tail->getData(); }
+
+    LinkListIterator<T> & begin() { return * new LinkListIterator<T>(head); }
+    LinkListIterator<T> & end() { return * new LinkListIterator<T>(tail); }
+    T & at(const LinkListIterator<T> &iter) const { return iter.getCurrPosition()->getData(); } //TODO
 
 };
 

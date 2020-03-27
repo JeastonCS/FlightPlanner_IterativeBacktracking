@@ -30,7 +30,7 @@ public:
 
     ListNode *& getNext() { return next; }
     ListNode *& getPrevious() { return previous; }
-    T getData() { return data; }
+    T & getData() { return data; }
 };
 
 #endif //S20_PA04_FLIGHTPLANNER_LISTNODE_H

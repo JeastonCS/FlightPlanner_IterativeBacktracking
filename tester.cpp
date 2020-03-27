@@ -7,6 +7,7 @@
 #include "DSString.h"
 #include "ListNode.h"
 #include "LinkList.h"
+#include "LinkListIterator.h"
 
 TEST_CASE ("ListNode class") {
     SECTION ("constructor (int)") {
@@ -361,5 +362,192 @@ TEST_CASE ("LinkList class") {
 
         stringList.pop_back();
         REQUIRE(stringList.isEmpty());
+    }
+    //----------------------------------------------------------------------------------------------------------------//
+    SECTION("Iterable functionality (int)") {
+        LinkList<int> list;
+        LinkListIterator<int> iter;
+
+        REQUIRE(iter.getCurrIndex() == -1);
+        REQUIRE(iter.getCurrPosition() == nullptr);
+
+        list.push_back(1);
+
+        iter = list.begin();
+        REQUIRE(iter.getCurrPosition()->getData() == 1);
+        REQUIRE(iter.getCurrIndex() == 0);
+
+        iter = list.end();
+        REQUIRE(iter.getCurrPosition()->getData() == 1);
+        REQUIRE(iter.getCurrIndex() == 0);
+
+        list.push_back(2);
+        list.push_back(3);
+        list.push_back(4);
+
+        iter = list.begin();
+        REQUIRE(iter.getCurrPosition()->getData() == 1);
+        REQUIRE(iter.getCurrIndex() == 0);
+
+        iter = list.end();
+        REQUIRE(iter.getCurrPosition()->getData() == 4);
+        REQUIRE(iter.getCurrIndex() == 3);
+
+        //written out for loop - backwards
+        iter = list.end();
+        REQUIRE(list.at(iter) == 4);
+
+        iter.operator--();
+        REQUIRE(list.at(iter) == 3);
+
+        iter.operator--();
+        REQUIRE(list.at(iter) == 2);
+
+        iter.operator--();
+        REQUIRE(iter >= list.begin());
+        REQUIRE(list.at(iter) == 1);
+
+        iter.operator--();
+
+        REQUIRE( !(iter >= list.begin()) );
+
+        //written out for loop - forwards
+        iter = list.begin();
+        REQUIRE(list.at(iter) == 1);
+
+        iter.operator++();
+        REQUIRE(list.at(iter) == 2);
+
+        iter.operator++();
+        REQUIRE(list.at(iter) == 3);
+
+        iter.operator++();
+        REQUIRE(iter <= list.end());
+        REQUIRE(list.at(iter) == 4);
+
+        iter.operator++();
+
+        REQUIRE( !(iter <= list.end()) );
+
+        //next/hasNext
+        iter = list.begin();
+        REQUIRE(iter.hasNext());
+        iter = list.end();
+        iter.operator++();
+        REQUIRE(!iter.hasNext());
+
+        iter = list.begin();
+        REQUIRE(iter.next() == 1);
+        REQUIRE(iter.next() == 2);
+        REQUIRE(iter.next() == 3);
+        REQUIRE(iter.hasNext());
+        REQUIRE(iter.next() == 4);
+
+        //previous/hasPrevious
+        iter = list.end();
+        REQUIRE(iter.hasPrevious());
+        iter = list.begin();
+        iter.operator--();
+        REQUIRE(!iter.hasPrevious());
+
+        iter = list.end();
+        REQUIRE(iter.previous() == 4);
+        REQUIRE(iter.previous() == 3);
+        REQUIRE(iter.previous() == 2);
+        REQUIRE(iter.hasPrevious());
+        REQUIRE(iter.previous() == 1);
+    }
+    SECTION("Iterable functionality (DSString)") {
+        LinkList<DSString> list;
+        LinkListIterator<DSString> iter;
+
+        REQUIRE(iter.getCurrIndex() == -1);
+        REQUIRE(iter.getCurrPosition() == nullptr);
+
+        list.push_back("1");
+
+        iter = list.begin();
+        REQUIRE(iter.getCurrPosition()->getData() == "1");
+        REQUIRE(iter.getCurrIndex() == 0);
+
+        iter = list.end();
+        REQUIRE(iter.getCurrPosition()->getData() == "1");
+        REQUIRE(iter.getCurrIndex() == 0);
+
+        list.push_back("2");
+        list.push_back("3");
+        list.push_back("4");
+
+        iter = list.begin();
+        REQUIRE(iter.getCurrPosition()->getData() == "1");
+        REQUIRE(iter.getCurrIndex() == 0);
+
+        iter = list.end();
+        REQUIRE(iter.getCurrPosition()->getData() == "4");
+        REQUIRE(iter.getCurrIndex() == 3);
+
+        //written out for loop - backwards
+        iter = list.end();
+        REQUIRE(list.at(iter) == "4");
+
+        iter.operator--();
+        REQUIRE(list.at(iter) == "3");
+
+        iter.operator--();
+        REQUIRE(list.at(iter) == "2");
+
+        iter.operator--();
+        REQUIRE(iter >= list.begin());
+        REQUIRE(list.at(iter) == "1");
+
+        iter.operator--();
+
+        REQUIRE( !(iter >= list.begin()) );
+
+        //written out for loop - forwards
+        iter = list.begin();
+        REQUIRE(list.at(iter) == "1");
+
+        iter.operator++();
+        REQUIRE(list.at(iter) == "2");
+
+        iter.operator++();
+        REQUIRE(list.at(iter) == "3");
+
+        iter.operator++();
+        REQUIRE(iter <= list.end());
+        REQUIRE(list.at(iter) == "4");
+
+        iter.operator++();
+
+        REQUIRE( !(iter <= list.end()) );
+
+        //next/hasNext
+        iter = list.begin();
+        REQUIRE(iter.hasNext());
+        iter = list.end();
+        iter.operator++();
+        REQUIRE(!iter.hasNext());
+
+        iter = list.begin();
+        REQUIRE(iter.next() == "1");
+        REQUIRE(iter.next() == "2");
+        REQUIRE(iter.next() == "3");
+        REQUIRE(iter.hasNext());
+        REQUIRE(iter.next() == "4");
+
+        //previous/hasPrevious
+        iter = list.end();
+        REQUIRE(iter.hasPrevious());
+        iter = list.begin();
+        iter.operator--();
+        REQUIRE(!iter.hasPrevious());
+
+        iter = list.end();
+        REQUIRE(iter.previous() == "4");
+        REQUIRE(iter.previous() == "3");
+        REQUIRE(iter.previous() == "2");
+        REQUIRE(iter.hasPrevious());
+        REQUIRE(iter.previous() == "1");
     }
 }
