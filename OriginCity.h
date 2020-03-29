@@ -7,18 +7,25 @@
 
 #include "DSString.h"
 #include "LinkList.h"
+#include "LinkListIterator.h"
 
 
 class OriginCity {
 private:
-    DSString cityName;
+    DSString originName;
     LinkList<DSString> destinations;
+    LinkListIterator<DSString> iter;
+
 public:
     OriginCity();
-    OriginCity(DSString);
+    OriginCity(DSString &);
+    OriginCity(DSString &, DSString &);
 
 
-    void addDestination (DSString);
+    void addDestination (DSString &);
+    bool containsDestination (const DSString &);
+
+    DSString & getOriginName() { return originName; }
 
 };
 

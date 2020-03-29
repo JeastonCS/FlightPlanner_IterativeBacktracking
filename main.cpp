@@ -14,18 +14,11 @@ int main(int argc, char** argv){
         Catch::Session().run();
     }
 
+    //create adjacency list from file
 
-//    LinkList<int> list1;
-//    list1.push_back(1);
-//    list1.push_back(2);
-//    list1.push_back(3);
-//    list1.push_back(4);
-//
-//    LinkList<int> list2;
-//
-//    list2 = list1;
-//    int temp = list2.getSize();
-//    cout << temp << endl;
+    //create vector of flights from file
+
+    //loop through vector of flights and call backtrackPossiblePaths(w/ ^list) AND getTopThreePaths() on each Flight in vector
 
 
     return 0;

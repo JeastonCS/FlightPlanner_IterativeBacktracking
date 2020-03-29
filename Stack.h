@@ -13,9 +13,9 @@ class Stack {
 private:
     LinkList<T> stack;
 public:
-    Stack() {
-        stack = * new LinkList<T>();
-    }
+    Stack();
+
+    Stack<T> & operator=(const Stack<T> &);
 
     void push_back(T val) { stack.push_back(val); }
     void pop_back() { stack.pop_back(); }
@@ -24,6 +24,16 @@ public:
     T getBack() { return stack.getBack(); }
     int getSize() { return stack.getSize(); }
 };
+
+template<typename T>
+Stack<T>::Stack() {
+    stack = * new LinkList<T>();
+}
+
+template<typename T>
+Stack<T> &Stack<T>::operator=(const Stack<T> &rhs) {
+    this->stack = rhs.stack;
+}
 
 
 #endif //S20_PA04_FLIGHTPLANNER_STACK_H

@@ -20,6 +20,7 @@ public:
     bool operator<=(const LinkListIterator<T> &) const;
     bool operator>=(const LinkListIterator<T> &) const;
     LinkListIterator<T> & operator=(const LinkListIterator<T> &);
+    LinkListIterator<T> & operator=(ListNode<T> *);
     void operator++();
     void operator--();
 
@@ -64,6 +65,13 @@ template<typename T>
 LinkListIterator<T> &LinkListIterator<T>::operator=(const LinkListIterator<T> &rhs) {
     currPosition = rhs.currPosition;
     currIndex = rhs.currIndex;
+    return *this;
+}
+
+template<typename T>
+LinkListIterator<T> &LinkListIterator<T>::operator=(ListNode<T> *) {
+    currPosition = nullptr;
+    currIndex = -1;
     return *this;
 }
 
