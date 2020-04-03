@@ -61,7 +61,7 @@ int main(int argc, char** argv){
     }
 
     //loop through flights and output top three flights to file
-    ofstream outFile("OutFile.txt");
+    ofstream outFile(argv[3]);
     for (int i = 0; i < flights.size(); i++) {
         flights.at(i).printToFile(outFile);
     }
