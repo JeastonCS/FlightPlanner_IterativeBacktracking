@@ -13,19 +13,43 @@
 class OriginCity {
 private:
     DSString originName;
+
     LinkList<DSString> destinations;
-    LinkListIterator<DSString> iter;
+    LinkList<int> costList;
+    LinkList<int> timeList;
+
+    LinkListIterator<DSString> destinationsIter;
+    LinkListIterator<int> costIterator;
+    LinkListIterator<int> timeIterator;
 
 public:
     OriginCity();
-    OriginCity(DSString &);
-    OriginCity(DSString &, DSString &);
+    OriginCity(const OriginCity &);
+    OriginCity(const DSString &);
+    OriginCity(const DSString &, const DSString &, int, int);
 
+    bool operator==(const OriginCity &) const;
 
-    void addDestination (DSString &);
+    void addDestination (const DSString &, int, int);
     bool containsDestination (const DSString &);
+    void moveToNextDestination() { destinationsIter.operator++(); costIterator.operator++(); timeIterator.operator++(); }
 
-    DSString & getOriginName() { return originName; }
+    const DSString & getOriginName() const { return originName; }
+    LinkListIterator<DSString> & getDestinationsIter() { return destinationsIter; }
+    LinkListIterator<int> & getCostIterator() { return costIterator; }
+    LinkListIterator<int> & getTimeIterator() { return timeIterator; }
+    void setIterators() { destinationsIter = destinations.begin(); costIterator = costList.begin(); timeIterator = timeList.begin(); }
+    LinkListIterator<DSString> & getDestinationsBegin() { return destinations.begin(); }
+    LinkListIterator<int> & getCostIteratorBegin() { return costList.begin(); }
+    LinkListIterator<int> & getTimeIteratorBegin() { return timeList.begin(); }
+    LinkListIterator<DSString> & getDestinationsEnd() { return destinations.end(); }
+    LinkListIterator<int> & getCostListEnd() { return costList.end(); }
+    LinkListIterator<int> & getTimeListEnd() { return timeList.end(); }
+//    LinkListIterator<int> & getCostIteratorEnd()
+//    LinkListIterator<int> & get
+//    LinkList<DSString> & getDestinations() { return destinations; }
+
+    void print();
 
 };
 

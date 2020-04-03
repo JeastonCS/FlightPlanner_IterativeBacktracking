@@ -20,7 +20,7 @@ public:
     bool operator<=(const LinkListIterator<T> &) const;
     bool operator>=(const LinkListIterator<T> &) const;
     LinkListIterator<T> & operator=(const LinkListIterator<T> &);
-    LinkListIterator<T> & operator=(ListNode<T> *);
+//    LinkListIterator<T> & operator=(ListNode<T> *&);
     void operator++();
     void operator--();
 
@@ -29,10 +29,10 @@ public:
     T & next();
     T & previous();
 
-    ListNode<T> * getCurrPosition() const { return currPosition; }
-    int getCurrIndex() { return currIndex; }
+    ListNode<T> *& getCurrPosition() { return currPosition; }
+    int getCurrIndex() const { return currIndex; }
 private:
-    int findIndex(ListNode<T> *);
+    int findIndex(ListNode<T> *&);
 };
 
 template<typename T>
@@ -42,7 +42,7 @@ LinkListIterator<T>::LinkListIterator(ListNode<T> *startingPtr) {
 }
 
 template<typename T>
-int LinkListIterator<T>::findIndex(ListNode<T> *startingPtr) {
+int LinkListIterator<T>::findIndex(ListNode<T> *&startingPtr) {
     int count = 0;
     ListNode<T> *curr = startingPtr;
     while (curr != nullptr) {
@@ -68,12 +68,12 @@ LinkListIterator<T> &LinkListIterator<T>::operator=(const LinkListIterator<T> &r
     return *this;
 }
 
-template<typename T>
-LinkListIterator<T> &LinkListIterator<T>::operator=(ListNode<T> *) {
-    currPosition = nullptr;
-    currIndex = -1;
-    return *this;
-}
+//template<typename T>
+//LinkListIterator<T> &LinkListIterator<T>::operator=(ListNode<T> *&rhs) {
+//    currPosition = rhs;
+//    currIndex = -1;
+//    return *this;
+//}
 
 template<typename T>
 void LinkListIterator<T>::operator++() {

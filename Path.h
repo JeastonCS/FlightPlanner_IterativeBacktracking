@@ -8,15 +8,26 @@
 #include "DSString.h"
 #include "DSVector.h"
 #include "LinkList.h"
+#include "OriginCity.h"
 
 class Path {
 private:
     LinkList<DSString> path;
-    double cost;
+    int cost;
     int time;
 public:
     Path();
-    Path(const LinkList<DSString> &, double, int);
+    Path(const Path &);
+    Path(LinkList<OriginCity> &, int, int);
+
+    Path & operator=(const Path &);
+
+    int getCost() { return cost; }
+    int getTime() { return time; }
+    LinkList<DSString> & getPath() { return path; }
+
+private:
+    void initializePath(LinkList<OriginCity> &);
 };
 
 

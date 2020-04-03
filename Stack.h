@@ -17,12 +17,14 @@ public:
 
     Stack<T> & operator=(const Stack<T> &);
 
-    void push_back(T val) { stack.push_back(val); }
+    void push_back(const T &val) { stack.push_back(val); }
     void pop_back() { stack.pop_back(); }
     bool isEmpty() { return stack.isEmpty(); }
+    bool contains(const T &val) { return stack.contains(val); }
 
-    T getBack() { return stack.getBack(); }
+    T & getBack() { return stack.getBack(); }
     int getSize() { return stack.getSize(); }
+    LinkList<T> & getList() { return stack; }
 };
 
 template<typename T>

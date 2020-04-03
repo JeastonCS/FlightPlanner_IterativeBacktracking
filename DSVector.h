@@ -93,7 +93,7 @@ DSVector<T> DSVector<T>::operator=(const DSVector &rhs) {
     capacity_ = rhs.capacity_;
 
     delete [] data_;
-    data_ = new T[size_];
+    data_ = new T[capacity_];
 
     for (int i = 0; i < size_; i++)
         data_[i] = rhs.data_[i];

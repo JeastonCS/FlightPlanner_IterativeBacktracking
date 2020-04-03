@@ -16,8 +16,10 @@ class LinkList {
 private:
     ListNode<T> *head, *tail;
     int size;
+//    LinkListIterator<T> iter;
 public:
     LinkList();
+    LinkList(const LinkList<T> &);
     ~LinkList();
 
     LinkList<T> & operator= (const LinkList &);
@@ -29,16 +31,21 @@ public:
     void pop_back();
     bool isEmpty();
     bool contains(const T &);
+    LinkListIterator<T> & find(const T &);
 
     int getSize() { return size; }
     ListNode<T> * getHead() { return head; }
     ListNode<T> * getTail() { return tail; }
-    T getFront() { return head->getData(); }
-    T getBack() { return tail->getData(); }
+    T & getFront() { return head->getData(); }
+    T & getBack() { return tail->getData(); }
 
     LinkListIterator<T> & begin() { return * new LinkListIterator<T>(head); }
     LinkListIterator<T> & end() { return * new LinkListIterator<T>(tail); }
-    T & at(const LinkListIterator<T> &iter) const { return iter.getCurrPosition()->getData(); } //TODO
+    T & at(LinkListIterator<T> &iter) const { return iter.getCurrPosition()->getData(); }
+
+//    LinkListIterator<T> & getIter() { return iter; }
+//    void incrementIter() { iter.operator++(); }
+//    void setIter(const LinkListIterator<T> &toSet) { iter = toSet; }
 
 };
 
@@ -47,6 +54,23 @@ LinkList<T>::LinkList() {
     size = 0;
     head = nullptr;
     tail = nullptr;
+}
+
+template<typename T>
+LinkList<T>::LinkList(const LinkList<T> &rhs) {
+    this->size = 0;
+
+    ListNode<T> *curr = rhs.head;
+    if (curr == nullptr) {
+        head = nullptr;
+        tail = nullptr;
+    }
+    while (curr != nullptr) {
+        this->push_back(curr->getData());
+        curr = curr->getNext();
+    }
+
+//    iter = rhs.iter;
 }
 
 template <typename T>
@@ -61,15 +85,21 @@ LinkList<T>::~LinkList() {
 }
 
 template<typename T>
-LinkList<T> & LinkList<T>::operator=(const LinkList &rhs) {
+LinkList<T> & LinkList<T>::operator=(const LinkList<T> &rhs) {
     this->~LinkList<T>();
     this->size = 0;
 
     ListNode<T> *curr = rhs.head;
+    if (curr == nullptr) {
+        head = nullptr;
+        tail = nullptr;
+    }
     while (curr != nullptr) {
         this->push_back(curr->getData());
         curr = curr->getNext();
     }
+
+//    this->iter = rhs.iter;
 
     return *this;
 }
@@ -94,9 +124,10 @@ template<typename T>
 void LinkList<T>::push_back(const T &val) {
     this->size++;
 
-    ListNode<T> *nodePtr = new ListNode(val);
+    ListNode<T> *nodePtr = new ListNode<T>(val);
     if (head == nullptr) {
         head = tail = nodePtr;
+//        iter = begin(); //TODO
     }
     else {
         ListNode<T> *oldTail = tail;
@@ -161,6 +192,15 @@ bool LinkList<T>::contains(const T &element) {
         curr = curr->getNext();
     }
     return false;
+}
+
+template<typename T>
+LinkListIterator<T> &LinkList<T>::find(const T &val) {
+    for (auto iter = begin(); iter <= end(); iter.operator++()) {
+        if (at(iter) == val)
+            return iter;
+    }
+    return nullptr;
 }
 
 #endif //S20_PA04_FLIGHTPLANNER_LINKLIST_H

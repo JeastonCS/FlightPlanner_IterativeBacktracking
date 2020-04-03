@@ -16,13 +16,23 @@ public:
         next = nullptr;
         previous = nullptr;
     }
-    ListNode(T val) {
+    ListNode(const ListNode &toCopy) {
+        data = toCopy.data;
+        next = toCopy.next;
+        previous = toCopy.previous;
+    }
+    ListNode(const T &val) {
         data = val;
         next = nullptr;
         previous = nullptr;
     }
     ~ListNode() {}
 
+    ListNode & operator=(const ListNode &rhs) {
+        data = rhs.data;
+        next = rhs.next;
+        previous = rhs.previous;
+    }
     bool operator==(const ListNode &rhs) const { return data == rhs.data; }
 
     void setNext(ListNode *ptr) { next = ptr; }

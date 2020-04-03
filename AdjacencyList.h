@@ -15,15 +15,16 @@ private:
     LinkList<OriginCity> originCities;
     LinkListIterator<OriginCity> iter;
 public:
-    AdjacencyList();
+    AdjacencyList(char *);
 
     AdjacencyList & operator=(const AdjacencyList &);
 
-    void addOriginDestinationPair(DSString &, DSString &);
-
-
-private:
+    void initializeWithFile(char *);
+    void addOriginDestinationPair(const DSString &, const DSString &, int, int);
     void findOriginCity(const DSString &);
+    OriginCity * originCityAt(const DSString &);
+
+    void print();
 };
 
 

@@ -10,6 +10,8 @@
 #include "Path.h"
 #include "AdjacencyList.h"
 
+#include <fstream>
+
 class Flight {
 private:
     DSString originCity;
@@ -18,10 +20,17 @@ private:
 
     DSVector<Path> possiblePaths;
 public:
+    Flight();
+    Flight(const Flight &);
     Flight(const DSString &, const DSString &, const DSString &);
 
-    void initializePossiblePaths(const AdjacencyList &adjList);
+    Flight & operator= (const Flight &);
+
+    void initializePossiblePaths(AdjacencyList &adjList);
     void getTopThreePaths();
+    int calculateCost(LinkList<OriginCity> &);
+    int calculateTime(LinkList<OriginCity> &);
+    void printToFile(ofstream &);
 
     DSString & getOriginCity() { return originCity; }
     DSString & getDestinationCity() { return destinationCity; }
