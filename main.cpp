@@ -1,5 +1,5 @@
-//#define CATCH_CONFIG_RUNNER
-//#include "catch.hpp"
+#define CATCH_CONFIG_RUNNER
+#include "catch.hpp"
 
 #include "AdjacencyList.h"
 #include "FlightPlanner.h"
@@ -10,9 +10,9 @@ using namespace std;
 
 int main(int argc, char** argv){
 
-//    if (argc == 1) {
-//        Catch::Session().run();
-//    }
+    if (argc == 1) {
+        Catch::Session().run();
+    }
 
 
     //create adjacency list from file
