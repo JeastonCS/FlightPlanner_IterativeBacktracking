@@ -27,13 +27,16 @@ public:
     Flight & operator= (const Flight &);
 
     void initializePossiblePaths(AdjacencyList &adjList);
-    void getTopThreePaths();
-    int calculateCost(LinkList<OriginCity> &);
-    int calculateTime(LinkList<OriginCity> &);
+    void narrowToTopThree();
+
     void printToFile(ofstream &);
 
     DSString & getOriginCity() { return originCity; }
     DSString & getDestinationCity() { return destinationCity; }
+
+private:
+    int calculateCost(LinkList<OriginCity> &);
+    int calculateTime(LinkList<OriginCity> &);
 };
 
 

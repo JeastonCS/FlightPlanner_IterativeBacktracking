@@ -20,12 +20,13 @@ public:
     bool operator<=(const LinkListIterator<T> &) const;
     bool operator>=(const LinkListIterator<T> &) const;
     LinkListIterator<T> & operator=(const LinkListIterator<T> &);
-//    LinkListIterator<T> & operator=(ListNode<T> *&);
     void operator++();
     void operator--();
 
     bool hasNext();
     bool hasPrevious();
+    T & peekNext();
+    T & peekPrevious();
     T & next();
     T & previous();
 
@@ -68,13 +69,6 @@ LinkListIterator<T> &LinkListIterator<T>::operator=(const LinkListIterator<T> &r
     return *this;
 }
 
-//template<typename T>
-//LinkListIterator<T> &LinkListIterator<T>::operator=(ListNode<T> *&rhs) {
-//    currPosition = rhs;
-//    currIndex = -1;
-//    return *this;
-//}
-
 template<typename T>
 void LinkListIterator<T>::operator++() {
     currIndex++;
@@ -92,6 +86,11 @@ bool LinkListIterator<T>::hasNext() {
     return currPosition != nullptr;
 }
 
+template <typename T>
+T & LinkListIterator<T>::peekNext() {
+    return currPosition->getData();
+}
+
 template<typename T>
 T & LinkListIterator<T>::next() {
     T *dataPtr = &currPosition->getData();
@@ -103,6 +102,11 @@ T & LinkListIterator<T>::next() {
 template<typename T>
 bool LinkListIterator<T>::hasPrevious() {
     return currPosition != nullptr;
+}
+
+template <typename T>
+T & LinkListIterator<T>::peekPrevious() {
+    return currPosition->getData();
 }
 
 template<typename T>

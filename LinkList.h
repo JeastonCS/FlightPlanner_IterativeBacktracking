@@ -16,7 +16,6 @@ class LinkList {
 private:
     ListNode<T> *head, *tail;
     int size;
-//    LinkListIterator<T> iter;
 public:
     LinkList();
     LinkList(const LinkList<T> &);
@@ -42,11 +41,6 @@ public:
     LinkListIterator<T> & begin() { return * new LinkListIterator<T>(head); }
     LinkListIterator<T> & end() { return * new LinkListIterator<T>(tail); }
     T & at(LinkListIterator<T> &iter) const { return iter.getCurrPosition()->getData(); }
-
-//    LinkListIterator<T> & getIter() { return iter; }
-//    void incrementIter() { iter.operator++(); }
-//    void setIter(const LinkListIterator<T> &toSet) { iter = toSet; }
-
 };
 
 template <typename T>
@@ -69,8 +63,6 @@ LinkList<T>::LinkList(const LinkList<T> &rhs) {
         this->push_back(curr->getData());
         curr = curr->getNext();
     }
-
-//    iter = rhs.iter;
 }
 
 template <typename T>
@@ -99,8 +91,6 @@ LinkList<T> & LinkList<T>::operator=(const LinkList<T> &rhs) {
         curr = curr->getNext();
     }
 
-//    this->iter = rhs.iter;
-
     return *this;
 }
 
@@ -127,7 +117,6 @@ void LinkList<T>::push_back(const T &val) {
     ListNode<T> *nodePtr = new ListNode<T>(val);
     if (head == nullptr) {
         head = tail = nodePtr;
-//        iter = begin(); //TODO
     }
     else {
         ListNode<T> *oldTail = tail;

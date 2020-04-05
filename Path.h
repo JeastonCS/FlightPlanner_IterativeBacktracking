@@ -17,8 +17,8 @@ private:
     int time;
 public:
     Path();
-    Path(const Path &);
     Path(LinkList<OriginCity> &, int, int);
+    Path(const Path &);
 
     Path & operator=(const Path &);
 

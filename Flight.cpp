@@ -14,14 +14,6 @@ Flight::Flight() {
     possiblePaths = * new DSVector<Path>;
 }
 
-Flight::Flight(const Flight &toCopy) {
-    originCity = toCopy.originCity;
-    destinationCity = toCopy.destinationCity;
-    sortingCharacteristic = toCopy.sortingCharacteristic;
-
-    possiblePaths = toCopy.possiblePaths;
-}
-
 Flight::Flight(const DSString &origin, const DSString &dest, const DSString &sortingChar) {
     originCity = origin;
     destinationCity = dest;
@@ -30,24 +22,37 @@ Flight::Flight(const DSString &origin, const DSString &dest, const DSString &sor
     possiblePaths = * new DSVector<Path>;
 }
 
+Flight::Flight(const Flight &toCopy) {
+    originCity = toCopy.originCity;
+    destinationCity = toCopy.destinationCity;
+    sortingCharacteristic = toCopy.sortingCharacteristic;
+
+    possiblePaths = toCopy.possiblePaths;
+}
+
 Flight &Flight::operator=(const Flight &rhs) {
     originCity = rhs.originCity;
     destinationCity = rhs.destinationCity;
     sortingCharacteristic = rhs.sortingCharacteristic;
+
     possiblePaths = rhs.possiblePaths;
 
     return *this;
 }
 
-void Flight::initializePossiblePaths(AdjacencyList &adjList) {
-
+void Flight::initializePossiblePaths(AdjacencyList &adjList)
+{
     Stack<OriginCity> stack;
 
-    stack.push_back(*adjList.originCityAt(originCity));
+    OriginCity *city = adjList.originCityAt(originCity);
+    if (city == nullptr)
+        return;
 
-    int cost = 0;
-    int time = 0;
+    stack.push_back(*adjList.originCityAt(originCity));
     while (!stack.isEmpty()) {
+//        if (stack.getBack().c) {
+//
+//        }
         if (stack.getBack().getOriginName() == destinationCity) {
             Path path = * new Path(stack.getList(), calculateCost(stack.getList()), calculateTime(stack.getList()));
             possiblePaths.push_back(path);
@@ -57,8 +62,7 @@ void Flight::initializePossiblePaths(AdjacencyList &adjList) {
             //
             bool pushed = false;
             while (stack.getBack().getDestinationsIter().hasNext()) {
-                OriginCity *destinationCity = adjList.originCityAt(stack.getBack().getDestinationsIter().getCurrPosition()->getData());
-
+                OriginCity *destinationCity = adjList.originCityAt(stack.getBack().getDestinationsIter().getCurrPosition()->getData().getDestination());
                 stack.getBack().moveToNextDestination();
                 if (!stack.contains(*destinationCity)) {
                     stack.push_back(*destinationCity);
@@ -77,9 +81,15 @@ void Flight::initializePossiblePaths(AdjacencyList &adjList) {
 
 int Flight::calculateCost(LinkList<OriginCity> &list) {
     int cost = 0;
-    for (auto iter = list.begin(); iter <= list.end(); iter.operator++()) {
-        for (auto costIter = list.at(iter).getCostIteratorBegin(); costIter <= list.at(iter).getCostListEnd(); costIter.operator++())
-            cost += costIter.getCurrPosition()->getData();
+
+    int size = list.getSize() - 1;
+    auto iter = list.end();
+    for (int i = 0; i < size; i++) {
+        //get connection city's name
+        DSString connection = iter.previous().getOriginName();
+
+        //find its cost in previous city
+        cost += iter.peekPrevious().findDestination(connection)->getCost();
     }
 
     return cost;
@@ -87,15 +97,21 @@ int Flight::calculateCost(LinkList<OriginCity> &list) {
 
 int Flight::calculateTime(LinkList<OriginCity> &list) {
     int time = 0;
-    for (auto iter = list.begin(); iter <= list.end(); iter.operator++()) {
-        for (auto timeIter = list.at(iter).getTimeIteratorBegin(); timeIter <= list.at(iter).getTimeListEnd(); timeIter.operator++())
-            time += timeIter.getCurrPosition()->getData();
+
+    int size = list.getSize() - 1;
+    auto iter = list.end();
+    for (int i = 0; i < size; i++) {
+        //get connection city's name
+        DSString connection = iter.previous().getOriginName();
+
+        //find its cost in previous city
+        time += iter.peekPrevious().findDestination(connection)->getTime();
     }
 
     return time;
 }
 
-void Flight::getTopThreePaths() {
+void Flight::narrowToTopThree() {
         DSVector<Path> topThreePaths = * new DSVector<Path>;
 
         int size;
@@ -148,6 +164,9 @@ void Flight::printToFile(ofstream &outFile) {
     }
 
     //print top 3 paths
+    if (possiblePaths.size() == 0)
+        outFile << "\tNo paths available" << endl;
+
     for (int i = 0; i < possiblePaths.size(); i++){
         outFile << "\tPath " << i+1 << ": ";
 

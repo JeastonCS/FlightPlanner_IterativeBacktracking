@@ -3,18 +3,19 @@
 //
 
 #include "AdjacencyList.h"
-#include "LinkList.h"
-#include "LinkListIterator.h"
-#include "OriginCity.h"
-#include <fstream>
-#include <iostream>
-using namespace std;
+
+AdjacencyList::AdjacencyList() {
+    originCities = * new LinkList<OriginCity>;
+}
 
 AdjacencyList::AdjacencyList(char *fileName) {
     originCities = * new LinkList<OriginCity>;
-    iter = * new LinkListIterator<OriginCity>;
-
     initializeWithFile(fileName);
+}
+
+AdjacencyList & AdjacencyList::operator=(const AdjacencyList &rhs) {
+    this->originCities = rhs.originCities;
+    return *this;
 }
 
 void AdjacencyList::initializeWithFile(char *fileName) {
@@ -40,73 +41,67 @@ void AdjacencyList::initializeWithFile(char *fileName) {
         flightData.getline(timeChar, 10);
 
         DSString originCity = * new DSString(origin);
-        DSString destinationCity = * new DSString(destination);
+        DSString destinationName = * new DSString(destination);
+        DSString cost = * new DSString(costChar);
+        DSString time = * new DSString(timeChar);
 
-        DSString costString = * new DSString(costChar);
-        DSString timeString = * new DSString(timeChar);
-        int cost = costString.toInt();
-        int time = timeString.toInt();
-
-        addOriginDestinationPair(originCity, destinationCity, cost, time);
+        addOriginDestinationPair(originCity, destinationName, cost.toInt(), time.toInt());
     }
 
     //set the iterators in each OriginCity to their their begin() values
-    for (iter = originCities.begin(); iter <= originCities.end(); iter.operator++()) {
+    for (auto iter = originCities.begin(); iter <= originCities.end(); iter.operator++()) {
         originCities.at(iter).setIterators();
     }
 
     flightData.close();
 }
 
-void AdjacencyList::addOriginDestinationPair(const DSString &originCity, const DSString &destinationCity, int cost, int time) {
+void AdjacencyList::addOriginDestinationPair(const DSString &originName, const DSString &destinationName, int cost, int time) {
+    DestinationCity destinationCity = * new DestinationCity(destinationName, cost, time);
+    DestinationCity originAsDestination = * new DestinationCity(originName, cost, time);
+
     if (originCities.isEmpty()) {
-        OriginCity origin1 = * new OriginCity(originCity, destinationCity, cost, time);
+        OriginCity origin1 = * new OriginCity(originName, destinationCity);
         originCities.push_back(origin1);
-        OriginCity origin2 = * new OriginCity(destinationCity, originCity, cost, time);
+
+        OriginCity origin2 = * new OriginCity(destinationName, originAsDestination);
         originCities.push_back(origin2);
     }
     else {
         //check if origin is on list
-        findOriginCity(originCity);
+        auto iter = findOriginCity(originName);
         if (iter.getCurrIndex() == -1) { //if not, add origin and destination
-            OriginCity origin = * new OriginCity(originCity, destinationCity, cost, time);
+            OriginCity origin = * new OriginCity(originName, destinationCity);
             originCities.push_back(origin);
         }
         else { //if it is, add destination to the origin city
-            originCities.at(iter).addDestination(destinationCity, cost, time);
+            originCities.at(iter).addDestination(destinationCity);
         }
 
         //check if destination is on list
-        findOriginCity(destinationCity);
+        iter = findOriginCity(destinationName);
         if (iter.getCurrIndex() == -1) { //if not, add destination as an origin city and its destination (aka originCity)
-            OriginCity origin = * new OriginCity(destinationCity, originCity, cost, time);
+            OriginCity origin = * new OriginCity(destinationName, originAsDestination);
             originCities.push_back(origin);
         }
         else { //if it is, add originCity as a destination of destinationCity
-            originCities.at(iter).addDestination(originCity, cost, time);
+            originCities.at(iter).addDestination(originAsDestination);
         }
     }
 }
 
-AdjacencyList & AdjacencyList::operator=(const AdjacencyList &rhs) {
-    this->originCities = rhs.originCities;
-    iter = * new LinkListIterator<OriginCity>;
-
-    return *this;
-}
-
-void AdjacencyList::findOriginCity (const DSString &originCity) {
-    for (iter = originCities.begin(); iter <= originCities.end(); iter.operator++()) {
+LinkListIterator<OriginCity> AdjacencyList::findOriginCity (const DSString &originCity) {
+    for (auto iter = originCities.begin(); iter <= originCities.end(); iter.operator++()) {
         if (originCities.at(iter).getOriginName() == originCity) {
-            return;
+            return iter;
         }
     }
-    iter = * new LinkListIterator<OriginCity>;
+    return nullptr;
 }
 
 OriginCity * AdjacencyList::originCityAt(const DSString &originCity) {
     bool found = false;
-    for (iter = originCities.begin(); iter <= originCities.end(); iter.operator++()) {
+    for (auto iter = originCities.begin(); iter <= originCities.end(); iter.operator++()) {
         if (originCities.at(iter).getOriginName() == originCity) {
             return &originCities.at(iter);
         }
@@ -116,7 +111,7 @@ OriginCity * AdjacencyList::originCityAt(const DSString &originCity) {
 
 void AdjacencyList::print() {
     for (auto iter = originCities.begin(); iter <= originCities.end(); iter.operator++()) {
-        OriginCity currCity = originCities.at(iter);
-        currCity.print();
+        originCities.at(iter).print();
+        cout << endl;
     }
 }
